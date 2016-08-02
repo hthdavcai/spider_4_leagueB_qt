@@ -1,0 +1,12 @@
+[db]
+db_host = 182.92.191.193
+db_name = db_lottery
+db_user = test_lottery
+db_pass = 9Pnc7BeJ
+db_charset = utf8
+db_port = 3306
+[spider]
+spider_name = spiders_exec_okooo_jclq
+spiders_exec_tab = spiders_exec
+spiders_exec_id = spiders_exec_id
+spiders_exec_command = spiders_exec_command

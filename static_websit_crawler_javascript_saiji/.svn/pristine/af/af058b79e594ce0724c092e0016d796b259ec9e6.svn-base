@@ -1,0 +1,1 @@
+AbstractSpider.py instant_news
