@@ -7,21 +7,29 @@ import ConfigParser
 from scrapy.utils.serialize import ScrapyJSONEncoder
 
 if __name__ == '__main__':
-    # cf = ConfigParser.ConfigParser()
-    # cf.read("redis.cfg")
+    cf = ConfigParser.ConfigParser()
+    cf.read("redis.cfg")
 
-    redis_host = 'localhost'
-    redis_port = 6379
-    password = '-1'
-    spider_name = 'spider1'
+    redis_host = cf.get('redis', 'host')
+    redis_port = cf.get('redis', 'port')
+    password = cf.get('redis', 'password')
+    spider_name = cf.get('redis', 'spider_name')
 
     if password == '-1':
         redis_server = redis.Redis(host=redis_host, port=redis_port, db=4)
     else:
         redis_server = redis.Redis(host=redis_host, port=redis_port, password=password, db=4)
 
-    conn = MySQLdb.connect(host='101.201.211.208', user='spider', passwd='spiderCBjuj19BN&^*', db='db_lottery',
-                           charset='utf8', port=3306)
+    cf_mysql = ConfigParser.ConfigParser()
+    cf_mysql.read("platinfo.cfg")
+
+    host = cf_mysql.get("db", "db_host")
+    db = cf_mysql.get("db", "db_name")
+    user = cf_mysql.get("db", "db_user")
+    passwd = cf_mysql.get("db", "db_pass")
+    charset = cf_mysql.get("db", "db_charset")
+
+    conn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db, charset=charset, port=3306)
 
     cursor = conn.cursor()
     cursor.execute("select leagueId,season,leagueType from md_qt_league")
@@ -59,13 +67,13 @@ if __name__ == '__main__':
             cf_dic = eval(cfstr)
             try:
                 if 'League' in cfstr and cf_dic['leagueId'] in league_id_lst:
-                    os.system('python AbstractSpider.py spiders_exec_qt_league_fixtures {}'.format(timestamp))
+                    pass
+                    # os.system('python AbstractSpider.py spiders_exec_qt_league_fixtures {}'.format(timestamp))
                 # elif 'CupMatch' in cfstr:
                 #     os.system('python AbstractSpider.py spiders_exec_qt_cupmatch_fixtures {}'.format(timestamp))
                 #     pass
-                # elif 'SubLeague' in cfstr:
-                #     os.system('python AbstractSpider.py spiders_exec_qt_subleague_fixtures {}'.format(timestamp))
-                #     pass
+                elif 'SubLeague' in cfstr:
+                    os.system('python AbstractSpider.py spiders_exec_qt_subleague_fixtures {}'.format(timestamp))
             except SystemExit, e:
                 print e
             except Exception, e:
