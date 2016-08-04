@@ -92,7 +92,7 @@ class websiteSpider(CrawlSpider):
 
             round_count = sel.xpath("count(//td[@class='lsm2'])").extract()[0]
             round_count = int(round_count.split('.')[0])
-            subleague_count = sel.xpath("count(//td[@class='cupmatch_rw2'])").extract()[0]
+            subleague_count = sel.xpath("count(//td[contains(@class,'cupmatch_rw2')])").extract()[0]
             subleague_count = int(subleague_count.split('.')[0])
 
             while 1 == 1:
